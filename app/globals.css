@@ -59,12 +59,17 @@ body {
   color: var(--color-petal-light);
   font-family: var(--font-sans);
   overflow-x: hidden;
-  /* the whole UI is an app surface — don't let text get highlighted */
+}
+
+/* App surface — no text highlighting anywhere. Applied per-element (not just on
+   <body>) so it also covers the fullscreen top-layer, which can bypass inherited
+   user-select. Real inputs stay selectable/editable. */
+*,
+*::before,
+*::after {
   -webkit-user-select: none;
   user-select: none;
 }
-
-/* …but keep real text fields selectable/editable (name inputs) */
 input,
 textarea {
   -webkit-user-select: text;
