@@ -10,7 +10,7 @@ export default function WaitingScreen() {
 
   return (
     <main className="relative flex min-h-dvh flex-col items-center justify-center gap-4 px-6 text-center">
-      <Mole className="h-56 w-56 sm:h-64 sm:w-64" />
+      <Mole className="h-64 w-64 sm:h-80 sm:w-80" />
 
       <h2 className="flex items-baseline justify-center gap-0.5 text-2xl font-semibold text-petal-light">
         waiting for {room.peerName}
