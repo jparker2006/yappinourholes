@@ -41,7 +41,8 @@ export default function Room() {
               volume={room.voiceVolume}
               boundsRef={stageRef}
               initialCorner="tr"
-              controlsHidden={hidden}
+              storageKey="remote"
+              defaultWidth={240}
             />
           )}
           <PipBubble
@@ -49,10 +50,10 @@ export default function Room() {
             label={`${room.selfName} (you)`}
             boundsRef={stageRef}
             initialCorner="br"
-            controlsHidden={hidden}
+            storageKey="self"
+            defaultWidth={160}
             muted
             mirror
-            small
           />
         </>
       )}
