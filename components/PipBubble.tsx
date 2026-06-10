@@ -61,7 +61,7 @@ export default function PipBubble({
     >
       <VideoTile stream={stream} muted={muted} mirror={mirror} volume={volume} />
 
-      <span className="pointer-events-none absolute bottom-1 left-2 text-[11px] font-medium text-petal-light drop-shadow">
+      <span className="pointer-events-none absolute bottom-1 left-2 text-[11px] font-medium text-cream drop-shadow">
         {label}
       </span>
 

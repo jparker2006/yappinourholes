@@ -21,7 +21,7 @@ export default function Stage() {
         {stream ? (
           <VideoTile stream={stream} muted={room.sharing} volume={room.showVolume} objectFit="contain" />
         ) : (
-          <div className="flex h-full items-center justify-center text-petal/50">
+          <div className="flex h-full items-center justify-center text-cream/70">
             waiting for the show… 🎬
           </div>
         )}
@@ -59,7 +59,7 @@ function GridTile({
   return (
     <div className="panel relative aspect-video overflow-hidden rounded-2xl">
       <VideoTile stream={stream} muted={muted} mirror={mirror} volume={volume} />
-      <span className="absolute bottom-2 left-2 rounded-full bg-night/70 px-3 py-1 text-xs text-petal-light backdrop-blur">
+      <span className="absolute bottom-2 left-2 rounded-full bg-night/70 px-3 py-1 text-xs text-cream backdrop-blur">
         {label}
       </span>
     </div>

@@ -31,7 +31,7 @@ const moleCss = `
   object-fit: contain;
   transform-origin: 50% 92%;
   animation: mole-breathe 4.6s ease-in-out infinite;
-  filter: drop-shadow(0 12px 26px rgba(255, 95, 162, 0.28));
+  filter: drop-shadow(0 14px 24px rgba(150, 80, 110, 0.32));
   user-select: none;
 }
 @keyframes mole-breathe {

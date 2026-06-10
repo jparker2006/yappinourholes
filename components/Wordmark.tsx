@@ -10,7 +10,7 @@ export default function Wordmark({
 }) {
   return (
     <h1 className={`flex items-center gap-2 font-bold ${size} ${className}`}>
-      <span className="animate-float-slow inline-block bg-gradient-to-r from-petal via-blush to-lilac bg-clip-text text-transparent text-glow">
+      <span className="animate-float-slow inline-block bg-gradient-to-r from-blush-deep via-blush to-lilac bg-clip-text text-transparent text-glow">
         yappinourholes
       </span>
       <span className="animate-bob inline-block" aria-hidden>

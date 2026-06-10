@@ -23,7 +23,7 @@ export default function WaitingScreen() {
       {/* your own little preview in the corner */}
       <div className="fixed bottom-5 right-5 aspect-video w-40 overflow-hidden rounded-2xl ring-2 ring-blush/40 shadow-lg shadow-black/40">
         <VideoTile stream={room.localStream} muted mirror />
-        <span className="absolute bottom-1 left-2 text-[10px] text-petal-light/90 drop-shadow">
+        <span className="absolute bottom-1 left-2 text-[10px] text-cream/90 drop-shadow">
           {room.selfName} (you)
         </span>
       </div>
