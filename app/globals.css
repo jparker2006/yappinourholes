@@ -59,6 +59,16 @@ body {
   color: var(--color-petal-light);
   font-family: var(--font-sans);
   overflow-x: hidden;
+  /* the whole UI is an app surface — don't let text get highlighted */
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* …but keep real text fields selectable/editable (name inputs) */
+input,
+textarea {
+  -webkit-user-select: text;
+  user-select: text;
 }
 
 /* soft, subtle text shadow (no neon glow on the light theme) */

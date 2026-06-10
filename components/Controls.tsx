@@ -92,9 +92,6 @@ export default function Controls({
         </RoundToggle>
       </div>
 
-      {!movie && (
-        <p className="text-[11px] text-petal/70">💡 share a Chrome tab &amp; tick “share tab audio” to watch together</p>
-      )}
     </div>
   );
 }
