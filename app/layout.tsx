@@ -16,7 +16,7 @@ const cinzel = Cinzel({
 });
 
 export const metadata: Metadata = {
-  title: "yappinourholes",
+  title: "yappinourholes.",
   description: "our little room 🩷",
 };
 
