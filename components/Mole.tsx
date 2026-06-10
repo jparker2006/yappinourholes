@@ -31,8 +31,8 @@ const moleCss = `
   user-select: none;
 }
 /* counter-phase hard flip: foot-up shown, then foot-down (the tap), repeat */
-.mole-up { animation: herman-up 0.46s steps(1, end) infinite; }
-.mole-down { animation: herman-down 0.46s steps(1, end) infinite; }
+.mole-up { animation: herman-up 0.6s steps(1, end) infinite; }
+.mole-down { animation: herman-down 0.6s steps(1, end) infinite; }
 @keyframes herman-up {
   0% { opacity: 1; }
   56% { opacity: 0; }
