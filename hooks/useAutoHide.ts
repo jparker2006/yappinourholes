@@ -25,13 +25,11 @@ export function useAutoHide(active: boolean, delay = 3000): boolean {
     wake();
     window.addEventListener("pointermove", wake);
     window.addEventListener("pointerdown", wake);
-    window.addEventListener("touchstart", wake, { passive: true });
     window.addEventListener("keydown", wake);
     return () => {
       clearTimeout(timer);
       window.removeEventListener("pointermove", wake);
       window.removeEventListener("pointerdown", wake);
-      window.removeEventListener("touchstart", wake);
       window.removeEventListener("keydown", wake);
     };
   }, [active, delay]);

@@ -27,7 +27,7 @@ function spread(seed: number, n: number) {
 
 export default function EmojiLayer({ hidden = false }: { hidden?: boolean }) {
   const [flyers, setFlyers] = useState<Flyer[]>([]);
-  const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const timers = useRef(new Set<ReturnType<typeof setTimeout>>());
   const hiddenRef = useRef(hidden);
 
   useEffect(() => {
@@ -42,8 +42,11 @@ export default function EmojiLayer({ hidden = false }: { hidden?: boolean }) {
         const next = [...f, { id, glyph, seed }];
         return next.length > MAX_ON_SCREEN ? next.slice(next.length - MAX_ON_SCREEN) : next;
       });
-      const t = setTimeout(() => setFlyers((f) => f.filter((x) => x.id !== id)), REMOVE_AFTER);
-      timers.current.push(t);
+      const t = setTimeout(() => {
+        timers.current.delete(t); // fired timers must not pile up for the whole session
+        setFlyers((f) => f.filter((x) => x.id !== id));
+      }, REMOVE_AFTER);
+      timers.current.add(t);
     });
     const pending = timers.current;
     return () => {

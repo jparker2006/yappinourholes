@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 
 import Controls from "@/components/Controls";
 import EmojiLayer from "@/components/EmojiLayer";
@@ -9,6 +9,7 @@ import Stage from "@/components/Stage";
 import Wordmark from "@/components/Wordmark";
 import { useAutoHide } from "@/hooks/useAutoHide";
 import { useFullscreen } from "@/hooks/useFullscreen";
+import { usePersistedFlag } from "@/hooks/usePersistedFlag";
 import { useRoom } from "@/lib/useRoom";
 
 /**
@@ -23,24 +24,7 @@ export default function Room() {
   const [fullscreen, toggleFullscreen] = useFullscreen(stageRef);
 
   // hide the flying reactions on this screen only (sending still works)
-  const [emojisHidden, setEmojisHidden] = useState(false);
-  useEffect(() => {
-    try {
-      setEmojisHidden(localStorage.getItem("yoh:emoji-hidden") === "1");
-    } catch {
-      /* ignore */
-    }
-  }, []);
-  const toggleEmojis = useCallback(() => {
-    setEmojisHidden((v) => {
-      try {
-        localStorage.setItem("yoh:emoji-hidden", v ? "0" : "1");
-      } catch {
-        /* ignore */
-      }
-      return !v;
-    });
-  }, []);
+  const [emojisHidden, toggleEmojis] = usePersistedFlag("yoh:emoji-hidden");
 
   return (
     <main

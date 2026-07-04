@@ -1,11 +1,15 @@
 "use client";
 
-import { RefObject, useEffect, useState } from "react";
+import { RefObject } from "react";
 
 import VideoTile from "@/components/VideoTile";
+import { usePersistedFlag } from "@/hooks/usePersistedFlag";
 import { Corner, usePipGestures } from "@/hooks/usePipGestures";
 
 const PILL_MARGIN = 8;
+// ≈ pill height (py-1.5 + h-9 avatar ≈ 48px) + breathing room; keeps the
+// bottom-pinned pill's tap target fully on screen
+const PILL_CLEARANCE = 64;
 
 /**
  * A camera feed shrunk to a bubble during a share. Drag from anywhere on the
@@ -42,28 +46,19 @@ export default function PipBubble({
     defaultWidth,
   );
 
-  const [minimized, setMinimized] = useState(false);
-  useEffect(() => {
-    try {
-      setMinimized(localStorage.getItem(`yoh:pipmin:${storageKey}`) === "1");
-    } catch {
-      /* ignore */
-    }
-  }, [storageKey]);
-  const toggleMinimized = () =>
-    setMinimized((v) => {
-      try {
-        localStorage.setItem(`yoh:pipmin:${storageKey}`, v ? "0" : "1");
-      } catch {
-        /* ignore */
-      }
-      return !v;
-    });
+  const [minimized, togglePersistedMinimized] = usePersistedFlag(`yoh:pipmin:${storageKey}`);
+  // ignore minimize taps mid-gesture — swapping to the pill while window
+  // listeners are still driving the drag would leave the gesture orphaned
+  const toggleMinimized = () => {
+    if (!mode) togglePersistedMinimized();
+  };
 
-  // the pill pins to whichever screen edge the bubble was nearer
-  const rect = boundsRef.current?.getBoundingClientRect();
+  // the pill pins to whichever screen edge the bubble was nearer (rect is read
+  // only in pill mode: during a drag this renders every pointermove, and an
+  // unconditional getBoundingClientRect would force a layout each frame)
+  const rect = minimized ? boundsRef.current?.getBoundingClientRect() : undefined;
   const onLeft = rect && pos ? pos.x + width / 2 < rect.width / 2 : initialCorner.endsWith("l");
-  const pillY = rect && pos ? Math.max(PILL_MARGIN, Math.min(pos.y, rect.height - 64)) : PILL_MARGIN;
+  const pillY = rect && pos ? Math.max(PILL_MARGIN, Math.min(pos.y, rect.height - PILL_CLEARANCE)) : PILL_MARGIN;
 
   const cursor =
     mode === "drag" ? "cursor-grabbing scale-[1.02]" : mode ? "" : "cursor-grab transition-transform";
@@ -73,7 +68,18 @@ export default function PipBubble({
       data-pip={storageKey}
       onPointerDown={minimized ? undefined : onPointerDown}
       onClick={minimized ? toggleMinimized : undefined}
+      onKeyDown={
+        minimized
+          ? (e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                toggleMinimized();
+              }
+            }
+          : undefined
+      }
       role={minimized ? "button" : undefined}
+      tabIndex={minimized ? 0 : undefined}
       aria-label={minimized ? `restore ${label}` : undefined}
       style={
         minimized
