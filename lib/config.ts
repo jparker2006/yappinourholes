@@ -90,6 +90,13 @@ export const SCREEN_CONSTRAINTS: DisplayMediaStreamOptions = {
   audio: true,
 };
 
+// ─── brand ──────────────────────────────────────────────────────────
+// The blush-pink base (mirrors --color-babypink in app/globals.css). Kept here
+// so the manifest, the viewport theme-color, and the generated app icons all
+// pull the same value. If you change it, also update globals.css and re-run
+// `npm run gen:icons`.
+export const BRAND_PINK = "#fad2dd";
+
 // ─── movie-mode PiP bubbles ─────────────────────────────────────────
 export const PIP = {
   /** bubble width bounds (px, 16:9 aspect) */

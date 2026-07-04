@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 
+import InstallCard from "@/components/InstallCard";
 import VideoTile from "@/components/VideoTile";
 import Wordmark from "@/components/Wordmark";
 import { NameInput, RoundToggle } from "@/components/ui";
@@ -104,6 +105,8 @@ export default function PreJoin() {
           <p className="text-xs text-petal/45">turn on both mic & cam to join 🫶</p>
         )}
       </div>
+
+      <InstallCard />
     </main>
   );
 }

@@ -39,8 +39,10 @@ export default function EmojiBar({
         aria-pressed={reactionsHidden}
         title={reactionsHidden ? "show reactions" : "hide reactions"}
         aria-label={reactionsHidden ? "show reactions" : "hide reactions"}
-        className={`grid h-10 w-10 flex-none place-items-center rounded-full text-lg transition hover:bg-blush/15 active:scale-90 ${
-          reactionsHidden ? "opacity-100" : "opacity-70"
+        className={`grid h-10 w-10 flex-none place-items-center rounded-full text-lg transition active:scale-90 ${
+          reactionsHidden
+            ? "bg-blush/25 text-petal-light ring-1 ring-blush/50"
+            : "opacity-70 hover:bg-blush/15 hover:opacity-100"
         }`}
       >
         {reactionsHidden ? "🙈" : "👁️"}
