@@ -15,10 +15,14 @@ export default function Controls({
   hidden,
   fullscreen,
   onToggleFullscreen,
+  emojisHidden,
+  onToggleEmojis,
 }: {
   hidden: boolean;
   fullscreen: boolean;
   onToggleFullscreen: () => void;
+  emojisHidden: boolean;
+  onToggleEmojis: () => void;
 }) {
   const room = useRoom();
   const manager = getRoomManager();
@@ -27,12 +31,12 @@ export default function Controls({
 
   return (
     <div
-      className={`absolute inset-x-0 bottom-5 z-40 flex flex-col items-center gap-2 transition-opacity duration-300 ${
+      className={`absolute inset-x-0 bottom-[max(1.25rem,env(safe-area-inset-bottom))] z-40 flex flex-col items-center gap-2 px-3 transition-opacity duration-300 ${
         hidden ? "pointer-events-none opacity-0" : "opacity-100"
       }`}
     >
       {/* reactions */}
-      <EmojiBar />
+      <EmojiBar reactionsHidden={emojisHidden} onToggleReactions={onToggleEmojis} />
 
       {/* names popover */}
       {namesOpen && (
@@ -48,7 +52,7 @@ export default function Controls({
         </div>
       )}
 
-      <div className="panel flex items-center gap-2.5 rounded-full px-3 py-2.5">
+      <div className="panel flex max-w-[94vw] flex-wrap items-center justify-center gap-2 rounded-3xl px-3 py-2.5 sm:gap-2.5 sm:rounded-full">
         <RoundToggle active={room.micEnabled} onClick={() => manager.setMicEnabled(!room.micEnabled)} title="mic">
           {room.micEnabled ? "🎙️" : "🔇"}
         </RoundToggle>

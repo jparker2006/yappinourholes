@@ -12,7 +12,7 @@ export default function VolumeSliders() {
   const manager = getRoomManager();
 
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-3 sm:gap-4">
       <Slider
         icon="🗣️"
         title="their voice"
@@ -46,7 +46,7 @@ function Slider({
     <label className="flex items-center gap-2" title={title}>
       <button
         onClick={() => onChange(value > 0 ? 0 : 1)}
-        className="text-base leading-none"
+        className="grid h-9 w-9 flex-none place-items-center rounded-full text-base leading-none transition hover:bg-blush/15 active:scale-90"
         title={value > 0 ? "mute" : "unmute"}
       >
         {value === 0 ? "🔇" : icon}
@@ -58,7 +58,7 @@ function Slider({
         step={0.01}
         value={value}
         onChange={(e) => onChange(parseFloat(e.target.value))}
-        className="w-24"
+        className="w-20 sm:w-24"
       />
     </label>
   );

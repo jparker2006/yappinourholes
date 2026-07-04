@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import Controls from "@/components/Controls";
 import EmojiLayer from "@/components/EmojiLayer";
@@ -21,6 +21,26 @@ export default function Room() {
   const stageRef = useRef<HTMLDivElement>(null);
   const hidden = useAutoHide(movie);
   const [fullscreen, toggleFullscreen] = useFullscreen(stageRef);
+
+  // hide the flying reactions on this screen only (sending still works)
+  const [emojisHidden, setEmojisHidden] = useState(false);
+  useEffect(() => {
+    try {
+      setEmojisHidden(localStorage.getItem("yoh:emoji-hidden") === "1");
+    } catch {
+      /* ignore */
+    }
+  }, []);
+  const toggleEmojis = useCallback(() => {
+    setEmojisHidden((v) => {
+      try {
+        localStorage.setItem("yoh:emoji-hidden", v ? "0" : "1");
+      } catch {
+        /* ignore */
+      }
+      return !v;
+    });
+  }, []);
 
   return (
     <main
@@ -60,7 +80,7 @@ export default function Room() {
 
       {/* top bar */}
       <header
-        className={`absolute left-4 top-4 z-40 flex items-center gap-3 transition-opacity duration-300 ${
+        className={`absolute left-[max(1rem,env(safe-area-inset-left))] top-[max(1rem,env(safe-area-inset-top))] z-40 flex items-center gap-3 transition-opacity duration-300 ${
           movie && hidden ? "pointer-events-none opacity-0" : "opacity-100"
         }`}
       >
@@ -72,10 +92,16 @@ export default function Room() {
         )}
       </header>
 
-      {/* reactions fly over everything, even during the movie */}
-      <EmojiLayer />
+      {/* reactions fly over everything, even during the movie (unless hidden) */}
+      <EmojiLayer hidden={emojisHidden} />
 
-      <Controls hidden={movie && hidden} fullscreen={fullscreen} onToggleFullscreen={toggleFullscreen} />
+      <Controls
+        hidden={movie && hidden}
+        fullscreen={fullscreen}
+        onToggleFullscreen={toggleFullscreen}
+        emojisHidden={emojisHidden}
+        onToggleEmojis={toggleEmojis}
+      />
     </main>
   );
 }

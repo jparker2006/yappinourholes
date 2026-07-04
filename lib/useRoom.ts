@@ -8,7 +8,14 @@ import { RoomManager } from "./room/RoomManager";
 let _manager: RoomManager | null = null;
 
 export function getRoomManager(): RoomManager {
-  if (!_manager) _manager = new RoomManager();
+  if (!_manager) {
+    _manager = new RoomManager();
+    // dev-only escape hatch so UI states (movie-mode etc.) can be driven from
+    // the console / browser automation without a second peer
+    if (process.env.NODE_ENV !== "production" && typeof window !== "undefined") {
+      (window as unknown as Record<string, unknown>).__yohManager = _manager;
+    }
+  }
   return _manager;
 }
 

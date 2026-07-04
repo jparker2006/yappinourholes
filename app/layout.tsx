@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Cinzel, Quicksand } from "next/font/google";
 import "./globals.css";
 
@@ -18,6 +18,15 @@ const cinzel = Cinzel({
 export const metadata: Metadata = {
   title: "yappinourholes.",
   description: "our little room 🩷",
+};
+
+// viewport-fit=cover lets the movie stage bleed under phone notches; the bars
+// pad themselves back out with env(safe-area-inset-*)
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#fad2dd",
 };
 
 export default function RootLayout({

@@ -7,7 +7,9 @@ import { getRoomManager } from "@/lib/useRoom";
 /**
  * TikTok-live style flying reactions. Each emoji rises at a steady (linear) pace
  * with randomized drift/rotation derived from the shared `seed`, so both screens
- * animate identically. Spam-friendly. Intentionally NOT paused in movie-mode.
+ * animate identically. Spam-friendly. Intentionally NOT paused in movie-mode —
+ * but the viewer can hide the flyers entirely (sending still works; incoming
+ * reactions simply don't render while hidden).
  */
 
 type Flyer = { id: string; glyph: string; seed: number };
@@ -23,12 +25,19 @@ function spread(seed: number, n: number) {
   return x - Math.floor(x);
 }
 
-export default function EmojiLayer() {
+export default function EmojiLayer({ hidden = false }: { hidden?: boolean }) {
   const [flyers, setFlyers] = useState<Flyer[]>([]);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const hiddenRef = useRef(hidden);
+
+  useEffect(() => {
+    hiddenRef.current = hidden;
+    if (hidden) setFlyers([]);
+  }, [hidden]);
 
   useEffect(() => {
     const off = getRoomManager().on("emoji", ({ glyph, id, seed }) => {
+      if (hiddenRef.current) return;
       setFlyers((f) => {
         const next = [...f, { id, glyph, seed }];
         return next.length > MAX_ON_SCREEN ? next.slice(next.length - MAX_ON_SCREEN) : next;
@@ -42,6 +51,8 @@ export default function EmojiLayer() {
       pending.forEach(clearTimeout);
     };
   }, []);
+
+  if (hidden) return null;
 
   return (
     <div className="pointer-events-none absolute inset-0 z-[55] overflow-hidden" aria-hidden>
