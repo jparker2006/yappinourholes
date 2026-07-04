@@ -9,6 +9,7 @@ import Stage from "@/components/Stage";
 import Wordmark from "@/components/Wordmark";
 import { useAutoHide } from "@/hooks/useAutoHide";
 import { useFullscreen } from "@/hooks/useFullscreen";
+import { usePersistedFlag } from "@/hooks/usePersistedFlag";
 import { useRoom } from "@/lib/useRoom";
 
 /**
@@ -21,6 +22,9 @@ export default function Room() {
   const stageRef = useRef<HTMLDivElement>(null);
   const hidden = useAutoHide(movie);
   const [fullscreen, toggleFullscreen] = useFullscreen(stageRef);
+
+  // hide the flying reactions on this screen only (sending still works)
+  const [emojisHidden, toggleEmojis] = usePersistedFlag("yoh:emoji-hidden");
 
   return (
     <main
@@ -60,7 +64,7 @@ export default function Room() {
 
       {/* top bar */}
       <header
-        className={`absolute left-4 top-4 z-40 flex items-center gap-3 transition-opacity duration-300 ${
+        className={`absolute left-[max(1rem,env(safe-area-inset-left))] top-[max(1rem,env(safe-area-inset-top))] z-40 flex items-center gap-3 transition-opacity duration-300 ${
           movie && hidden ? "pointer-events-none opacity-0" : "opacity-100"
         }`}
       >
@@ -72,10 +76,16 @@ export default function Room() {
         )}
       </header>
 
-      {/* reactions fly over everything, even during the movie */}
-      <EmojiLayer />
+      {/* reactions fly over everything, even during the movie (unless hidden) */}
+      <EmojiLayer hidden={emojisHidden} />
 
-      <Controls hidden={movie && hidden} fullscreen={fullscreen} onToggleFullscreen={toggleFullscreen} />
+      <Controls
+        hidden={movie && hidden}
+        fullscreen={fullscreen}
+        onToggleFullscreen={toggleFullscreen}
+        emojisHidden={emojisHidden}
+        onToggleEmojis={toggleEmojis}
+      />
     </main>
   );
 }

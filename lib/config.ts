@@ -90,6 +90,18 @@ export const SCREEN_CONSTRAINTS: DisplayMediaStreamOptions = {
   audio: true,
 };
 
+// ─── movie-mode PiP bubbles ─────────────────────────────────────────
+export const PIP = {
+  /** bubble width bounds (px, 16:9 aspect) */
+  MIN_W: 96,
+  MAX_W: 560,
+  /** gap kept between a bubble and the stage edge (px) */
+  MARGIN: 12,
+  /** a bubble may never exceed these fractions of the stage width/height */
+  MAX_STAGE_W: 0.44,
+  MAX_STAGE_H: 0.4,
+};
+
 // ─── reactions ──────────────────────────────────────────────────────
 export const EMOJIS = ["😭", "😍", "🕊️", "😛", "😚", "😡", "❤️", "🔥", "👀", "🥺"] as const;
 export const SPECIAL_EMOJI = "❤️"; // bigger + sparkle trail

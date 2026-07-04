@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 
 /**
  * YouTube-style auto-hide. When `active` (i.e. a share is on), the controls and
- * unpinned PiP fade out after `delay` ms of mouse stillness and reappear on any
- * movement. When inactive, nothing ever hides.
+ * unpinned PiP fade out after `delay` ms of stillness and reappear on any mouse
+ * movement, tap, or key press (pointer events cover mouse and touch alike).
+ * When inactive, nothing ever hides.
  */
 export function useAutoHide(active: boolean, delay = 3000): boolean {
   const [hidden, setHidden] = useState(false);
@@ -22,12 +23,12 @@ export function useAutoHide(active: boolean, delay = 3000): boolean {
       timer = setTimeout(() => setHidden(true), delay);
     };
     wake();
-    window.addEventListener("mousemove", wake);
+    window.addEventListener("pointermove", wake);
     window.addEventListener("pointerdown", wake);
     window.addEventListener("keydown", wake);
     return () => {
       clearTimeout(timer);
-      window.removeEventListener("mousemove", wake);
+      window.removeEventListener("pointermove", wake);
       window.removeEventListener("pointerdown", wake);
       window.removeEventListener("keydown", wake);
     };
