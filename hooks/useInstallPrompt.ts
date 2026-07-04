@@ -16,6 +16,9 @@ export type InstallState = {
   ios: boolean;
   /** a native prompt is captured and ready to fire (Android/Chromium) */
   canPrompt: boolean;
+  /** a native prompt was captured at least once this session (stays true after
+   *  it's consumed, so the UI can offer a fallback hint instead of vanishing) */
+  everPromptable: boolean;
   /** fire the captured native prompt; resolves true if the user accepted */
   promptInstall: () => Promise<boolean>;
 };
@@ -38,6 +41,8 @@ export function useInstallPrompt(): InstallState {
   const [installed, setInstalled] = useState(false);
   const [ios, setIos] = useState(false);
   const [deferred, setDeferred] = useState<BeforeInstallPromptEvent | null>(null);
+  const [everPromptable, setEverPromptable] = useState(false);
+  const [prompting, setPrompting] = useState(false);
 
   useEffect(() => {
     setInstalled(standalone());
@@ -52,6 +57,7 @@ export function useInstallPrompt(): InstallState {
     const onBeforePrompt = (e: Event) => {
       e.preventDefault(); // stop the mini-infobar; we drive the prompt ourselves
       setDeferred(e as BeforeInstallPromptEvent);
+      setEverPromptable(true);
     };
     const onInstalled = () => {
       setInstalled(true);
@@ -71,12 +77,21 @@ export function useInstallPrompt(): InstallState {
   }, []);
 
   const promptInstall = async () => {
-    if (!deferred) return false;
-    await deferred.prompt();
-    const { outcome } = await deferred.userChoice;
-    setDeferred(null); // a captured prompt can only be used once
-    return outcome === "accepted";
+    // a captured prompt can only be fired once; guard against a double-tap
+    // racing a second prompt() call (which browsers reject)
+    if (!deferred || prompting) return false;
+    setPrompting(true);
+    try {
+      await deferred.prompt();
+      const { outcome } = await deferred.userChoice;
+      return outcome === "accepted";
+    } catch {
+      return false;
+    } finally {
+      setDeferred(null);
+      setPrompting(false);
+    }
   };
 
-  return { installed, ios, canPrompt: deferred !== null, promptInstall };
+  return { installed, ios, canPrompt: deferred !== null, everPromptable, promptInstall };
 }

@@ -1,7 +1,11 @@
 // One-off PWA icon generator. Composites the Herman mascot (public/herman.png,
 // transparent) onto the blush-pink brand background at a few sizes.
 //
-//   node scripts/gen-pwa-icons.mjs
+//   npm run gen:icons
+//
+// BG below mirrors BRAND_PINK in lib/config.ts / --color-babypink in
+// app/globals.css — keep them in sync (this is a plain Node script, so the hex
+// is duplicated rather than imported from the TS module).
 //
 // Outputs (committed to the repo):
 //   public/icon-192.png            192x192  "any"

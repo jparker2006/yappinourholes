@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Cinzel, Quicksand } from "next/font/google";
 import "./globals.css";
 import ServiceWorker from "@/components/ServiceWorker";
+import { BRAND_PINK } from "@/lib/config";
 
 const quicksand = Quicksand({
   variable: "--font-quicksand",
@@ -26,10 +27,9 @@ export const metadata: Metadata = {
     title: "yoh",
     statusBarStyle: "black-translucent",
   },
-  icons: {
-    icon: "/icon.png",
-    apple: "/apple-icon.png",
-  },
+  // favicon + apple-touch-icon come from the app/icon.png and app/apple-icon.png
+  // file conventions automatically — don't also declare them here or the <head>
+  // gets duplicate, out-of-sync <link> tags.
 };
 
 // viewport-fit=cover lets the movie stage bleed under phone notches; the bars
@@ -38,7 +38,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#fad2dd",
+  themeColor: BRAND_PINK,
 };
 
 export default function RootLayout({
