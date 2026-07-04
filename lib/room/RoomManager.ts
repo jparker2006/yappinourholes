@@ -704,6 +704,12 @@ export class RoomManager {
   }
 
   // ════════════════════════ reactions ════════════════════════
+  /** Show a transient local toast (rendered by ShareToast). Local-only — not
+   *  sent over the wire. */
+  toast(msg: string) {
+    this.fire("toast", msg);
+  }
+
   /** Fire a reaction locally and over the wire (UI rendered in M5). */
   sendEmoji(glyph: string) {
     const id = crypto.randomUUID();
